@@ -50,6 +50,41 @@ SlashCmdList["CONSOLE"]("gxMultisample 8");
 SlashCmdList["CONSOLE"]("gxMultisampleQuality 1");
 SlashCmdList["CONSOLE"]("showCull");
 
+--[[ Extra parameters
+SlashCmdList["CONSOLE"]("bspcache 1");
+SlashCmdList["CONSOLE"]("M2UsePixelShaders 1");
+SlashCmdList["CONSOLE"]("M2UseZFill 1");
+SlashCmdList["CONSOLE"]("M2UseClipPlanes 1");
+SlashCmdList["CONSOLE"]("M2UseThreads 1");
+SlashCmdList["CONSOLE"]("M2UseShaders 1");
+SlashCmdList["CONSOLE"]("M2BatchDoodads 1");
+SlashCmdList["CONSOLE"]("M2Faster 3"); -- <CPU physical cores - 1> (Dual-core = 1, Tri-core = 2, Quad-core and above = 3)
+
+SlashCmdList["CONSOLE"]("gxFixLag 1"); -- fixes mouse lag at expense of frames per second
+SlashCmdList["CONSOLE"]("timingModeOverride 2"); -- 1 (uses GetTickCount) 2 (uses RDTSC) 3 (uses QueryPerformanceCounter) 4 (uses timeGetTime). Experiment with which timing method gives you the smoothest gameplay. Set the value, then restart the game completely. Apparently RDTSC is the most precise timing method.
+
+-- SlashCmdList["CONSOLE"]("gxRefresh 60"); <your monitor's maximum refresh rate> e.g. gxRefresh 60 (for 60hz monitor)
+-- SlashCmdList["CONSOLE"]("gxTripleBuffer 1");
+-- SlashCmdList["CONSOLE"]("gxVSync 1");
+--]]
+
+--[[ Addons parameters for comparison with each other
+--ShaguTweaks conf
+SlashCmdList["CONSOLE"]("frillDensity 64");
+SlashCmdList["CONSOLE"]("unitDrawDist 300");
+
+--PFUI conf
+SlashCmdList["CONSOLE"]("frillDensity 24"); -- 48 (slider value), 15 (slider value)
+SlashCmdList["CONSOLE"]("lodDist 100"); -- 100+arg*10 (slider value)
+SlashCmdList["CONSOLE"]("nearClip 0.1"); -- arg*2/100 (slider value)
+SlashCmdList["CONSOLE"]("maxLOD 0"); -- arg (slider value)
+SlashCmdList["CONSOLE"]("footstepBias 0.125"); -- arg/15 (slider value)
+SlashCmdList["CONSOLE"]("DistCull 500"); -- 500+arg*25.92 (slider value)
+SlashCmdList["CONSOLE"]("SkyCloudLOD 0"); -- 1 (slider value)
+SlashCmdList["CONSOLE"]("mapObjLightLOD 0"); -- 2 (slider value)
+SlashCmdList["CONSOLE"]("texLodBias 0"); -- -1 (slider value)
+--]]
+
 local function IsSuperWoWLoaded()
 	-- https://github.com/balakethelock/SuperWoW/wiki/Features
 	return type(SetAutoloot) ~= "nil" and type(Clickthrough) ~= "nil"
