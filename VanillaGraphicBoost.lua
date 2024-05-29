@@ -49,3 +49,19 @@ SlashCmdList["CONSOLE"]("cameraDistanceMax 100");
 SlashCmdList["CONSOLE"]("gxMultisample 8");
 SlashCmdList["CONSOLE"]("gxMultisampleQuality 1");
 SlashCmdList["CONSOLE"]("showCull");
+
+local function IsSuperWoWLoaded()
+	-- https://github.com/balakethelock/SuperWoW/wiki/Features
+	return type(SetAutoloot) ~= "nil" and type(Clickthrough) ~= "nil"
+end
+
+	--print("Is SuperWoW loaded: " .. (IsSuperWoWLoaded() and "Yes" or "No"))
+
+if IsSuperWoWLoaded() then
+	SlashCmdList["CONSOLE"]("FoV 1.925"); -- set camera field of view (default = "1.57", can be any value from "0.1" to "3.14")
+	SlashCmdList["CONSOLE"]("SelectionCircleStyle 3"); -- set a different appearance for the target circle. https://github.com/balakethelock/SuperWoW/wiki/Changelog#14042024--110
+	SlashCmdList["CONSOLE"]("BackgroundSound 1"); -- set to enable or disable background sound while tabbed out (default = "0", can be "0" or "1")
+	SlashCmdList["CONSOLE"]("UncapSounds 1"); -- set to "1" to remove the hardcoded soundchannels limit.
+	SlashCmdList["CONSOLE"]("SoundSoftwareChannels 64"); -- If you want true uncapped sound experience you still have accompany this CVAR
+	SlashCmdList["CONSOLE"]("SoundMaxHardwareChannels 64"); -- If you want true uncapped sound experience you still have accompany this CVAR
+end
