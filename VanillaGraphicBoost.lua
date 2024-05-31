@@ -163,6 +163,42 @@ frame:SetScript("OnUpdate", OnUpdate)
 frame:Show()
 DebugPrint("Timer started")
 
+--[[
+-- Получение текущего разрешения экрана и масштаба интерфейса
+local resolution = GetCVar("gxResolution")
+local scale = GetCVar("uiScale")
+
+-- Извлечение ширины и высоты из строки разрешения
+local xIndex = string.find(resolution, "x")
+local width, height = tonumber(string.sub(resolution, 1, xIndex - 1)), tonumber(string.sub(resolution, xIndex + 1))
+
+-- Aspect ratio
+local aspectRatio = width / height
+
+-- Угол обзора в градусах
+local fovHorizontal = 64.40
+-- Коэффициент преобразования FOV для Vanilla 1.12.1
+local fovRatio = 41
+
+-- Calculate horizontal field of view (fov) in degrees based on aspect ratio
+--local fovVerticalCalc = 2 * math.atan(height / (width * 2 * math.tan(math.rad(fovHorizontal / 2)))) * (180 / math.pi)
+--local fovHorizontalCalc = 2 * math.atan(width / (height * 2 * math.tan(math.rad(fovVerticalCalc / 2)))) * (180 / math.pi)
+
+local fovHorizontalCalc = 2 * math.atan(width / (2 * height)) * (180 / math.pi)
+
+-- Расчет соотношения FOV
+local fovRatioManual = fovHorizontal / fovRatio
+local fovRatioCalc = fovHorizontalCalc / fovRatio
+
+--local clampedfovWan = math.min(fovWan, math.pi) -- максимальное значение
+
+DebugPrint("Aspect Ratio: " .. aspectRatio)
+DebugPrint("FOV Degrees Calculated: " .. fovHorizontalCalc)
+DebugPrint("FOV Degrees Manual: " .. fovHorizontal)
+DebugPrint("FOV Ratio Calculated: " .. fovRatioCalc)
+DebugPrint("FOV Ratio Manual: " .. fovRatioManual)
+--]]
+
 	--ConsoleExec("FoV 1.925") -- set camera field of view (default = "1.57", can be any value from "0.1" to "3.14")
 	ConsoleExec("SelectionCircleStyle 3") -- set a different appearance for the target circle. https://github.com/balakethelock/SuperWoW/wiki/Changelog#14042024--110
 	ConsoleExec("BackgroundSound 1") -- set to enable or disable background sound while tabbed out (default = "0", can be "0" or "1")
