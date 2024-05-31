@@ -60,7 +60,7 @@
 	ConsoleExec("M2BatchDoodads 1")
 	ConsoleExec("M2Faster 3") -- <CPU physical cores - 1> (Dual-core = 1, Tri-core = 2, Quad-core and above = 3)
 
-	ConsoleExec("gxFixLag 1") -- fixes mouse lag at expense of frames per second
+	ConsoleExec("gxFixLag 1") -- fixes mouse lag at expense of frames per second.
 	ConsoleExec("timingModeOverride 2") -- 1 (uses GetTickCount) 2 (uses RDTSC) 3 (uses QueryPerformanceCounter) 4 (uses timeGetTime). Experiment with which timing method gives you the smoothest gameplay. Set the value, then restart the game completely. Apparently RDTSC is the most precise timing method.
 
 	-- ConsoleExec("gxRefresh 60") <your monitor's maximum refresh rate> e.g. gxRefresh 60 (for 60hz monitor)
@@ -85,12 +85,20 @@
 	ConsoleExec("texLodBias 0") -- -1 (slider value)
 --]]
 
+local DEBUG_MODE = false
+
+local function DebugPrint(message)
+	if DEBUG_MODE then
+		DEFAULT_CHAT_FRAME:AddMessage("Debug: " .. message)
+	end
+end
+
 local function IsSuperWoWLoaded()
 	-- https://github.com/balakethelock/SuperWoW/wiki/Features
 	return type(SetAutoloot) ~= "nil" and type(Clickthrough) ~= "nil"
 end
 
-	--print("Is SuperWoW loaded: " .. (IsSuperWoWLoaded() and "Yes" or "No"))
+	DebugPrint("SuperWoW loaded: " .. (IsSuperWoWLoaded() and "Yes" or "No"))
 
 if IsSuperWoWLoaded() then
 	ConsoleExec("FoV 1.925") -- set camera field of view (default = "1.57", can be any value from "0.1" to "3.14")
