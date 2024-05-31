@@ -101,7 +101,69 @@ end
 	DebugPrint("SuperWoW loaded: " .. (IsSuperWoWLoaded() and "Yes" or "No"))
 
 if IsSuperWoWLoaded() then
-	ConsoleExec("FoV 1.925") -- set camera field of view (default = "1.57", can be any value from "0.1" to "3.14")
+	--https://github.com/fosley/WowFovChanger/blob/master/WowFovChanger/WowFovChanger.dat
+	--https://github.com/Quinchilion/WoWFoVFix/blob/master/src/WoWFoVFix/WoWFoVFix.cpp
+local function CalculateFoV(screenWidth, screenHeight)
+	local DEGREES_TO_RADIANS = math.pi / 180
+	local RADIANS_TO_DEGREES = 180 / math.pi
+
+	-- Base FoV value for a 4:3 screen ratio
+	local BASE_FIELD_OF_VIEW = 90 * DEGREES_TO_RADIANS
+	local BASE_SCREEN_RATIO = 4.0 / 3.0
+	local BASE_VIEW_DISTANCE = BASE_SCREEN_RATIO / math.tan(BASE_FIELD_OF_VIEW / 2)
+
+	local MAX_FIELD_OF_VIEW = 170 * DEGREES_TO_RADIANS
+	local MIN_FIELD_OF_VIEW = 30 * DEGREES_TO_RADIANS
+
+	if screenWidth == 0 or screenHeight == 0 then
+		DebugPrint("Screen size is zero, using default FoV")
+		return BASE_FIELD_OF_VIEW
+	end
+
+	local screenRatio = screenWidth / screenHeight
+	local newFoV = 2 * math.atan(screenRatio / BASE_VIEW_DISTANCE)
+	newFoV = math.max(math.min(newFoV, MAX_FIELD_OF_VIEW), MIN_FIELD_OF_VIEW)
+
+	DebugPrint("Calculated FoV (Degrees): " .. newFoV * RADIANS_TO_DEGREES)
+	return newFoV
+end
+
+local function ApplyFoV()
+	local resolution = GetCVar("gxResolution")
+	local xIndex = string.find(resolution, "x")
+	local screenWidth, screenHeight = tonumber(string.sub(resolution, 1, xIndex - 1)), tonumber(string.sub(resolution, xIndex + 1))
+	--local screenWidth, screenHeight = GetScreenWidth(), GetScreenHeight()
+	DebugPrint("Screen size: " .. screenWidth .. "x" .. screenHeight)
+	local optimalFoV = CalculateFoV(screenWidth, screenHeight)
+	--ConsoleExec("FoV ".. optimalFoV)
+	SetCVar("FoV", optimalFoV)
+	DebugPrint("Applied FoV: " .. optimalFoV)
+end
+
+-- Функция для проверки изменения разрешения экрана
+local function CheckForResolutionChange()
+	local currentResolution = GetCVar("gxResolution")
+	if currentResolution ~= previousResolution then
+		DebugPrint("Resolution change detected")
+		ApplyFoV()
+		previousResolution = currentResolution
+	end
+end
+
+-- Инициализация переменной для хранения предыдущего разрешения
+local previousResolution = GetCVar("gxResolution")
+DebugPrint("Initial resolution: " .. previousResolution)
+
+-- Создание таймера для проверки изменения разрешения каждые 5 секунд
+local frame = CreateFrame("Frame")
+local function OnUpdate()
+	CheckForResolutionChange()
+end
+frame:SetScript("OnUpdate", OnUpdate)
+frame:Show()
+DebugPrint("Timer started")
+
+	--ConsoleExec("FoV 1.925") -- set camera field of view (default = "1.57", can be any value from "0.1" to "3.14")
 	ConsoleExec("SelectionCircleStyle 3") -- set a different appearance for the target circle. https://github.com/balakethelock/SuperWoW/wiki/Changelog#14042024--110
 	ConsoleExec("BackgroundSound 1") -- set to enable or disable background sound while tabbed out (default = "0", can be "0" or "1")
 	ConsoleExec("UncapSounds 1") -- set to "1" to remove the hardcoded soundchannels limit.
