@@ -155,7 +155,7 @@ local previousResolution = GetCVar("gxResolution")
 DebugPrint("Initial resolution: " .. previousResolution)
 
 -- Создание таймера для проверки изменения разрешения каждые 5 секунд
-local frame = CreateFrame("Frame", nil, UIParent)
+local frame = CreateFrame("Frame")
 local function OnUpdate()
 	CheckForResolutionChange()
 end
